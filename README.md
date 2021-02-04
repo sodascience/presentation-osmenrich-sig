@@ -7,3 +7,4 @@ TODO:
 	- Overview page of people involved
 - `osm_enrich` (LV)
 - Use-cases (EJK)
+- How to contribute (HL)
