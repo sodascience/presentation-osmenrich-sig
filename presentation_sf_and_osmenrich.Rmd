@@ -1,14 +1,39 @@
 ---
 title: "Enriching spatial data in R and release NEW osmenrich package"
 author: "SoDaTeam"
-date: "5/19/2019"
+date: "18/2/2021"
 output: beamer_presentation
 ---
 
+## Introduction to ODESSEI 
+- Consortium of 34 Dutch scientific organizations 
+- Open data & research infrastructure for social science & economics
+
+\begin{center}
+\vspace{20pt}
+\includegraphics[width=0.7\textwidth]{figures/odessei_logo.png}
+\end{center}
+
+
+## Introduction to SoDa team
+- ODESSEI Social Data Science team (SoDa)
+- Aim is to support social scientists in research projects
+
+- SoDa team members:
+    1. Daniel Oberski (head team)
+    2. Erik-Jan Van Kesteren (coordinator)
+    3. Leonardo Vida (engineer)
+    4. Helen Lam (researcher/data steward)
+    5. Jonathan de Bruin (engineer/support staff liaison)
+
+
+## How to contribute
+- Contributions are greatly appreciated!
+- Go to the Github repository: sodascience/osmenrich
 
 ## Simple Features
 
-![Illustration (c) by Allison Horst](sf_drawing.jpg)
+![Illustration (c) by Allison Horst](simple_features/sf_drawing.jpg)
 
 ## Simple Features
 
@@ -214,7 +239,7 @@ plot(int_a_and_b, add = TRUE, col = 'green', lwd = 2)
 
 ## Simple features and data.frames
 
-![overview](sf_drawing.jpg)
+![overview](simple_features/sf_drawing.jpg)
 
 ## Simple features and data.frames
 
@@ -238,7 +263,7 @@ head(nc[,c("CNTY_ID", "NAME")])
 
 ## Simple features and data.frames
 
-![Illustration from Edzer Pebesma](sf_attributes.png)
+![Illustration from Edzer Pebesma](simple_features/sf_attributes.png)
 
 
 
@@ -250,7 +275,7 @@ head(nc[,c("CNTY_ID", "NAME")])
 
 - It's not (yet) a replacement of ArcGIS of QGIS.
 
-![ArcGIS](arcgis-desktop-features-analytics.png)
+![ArcGIS](simple_features/arcgis-desktop-features-analytics.png)
 
 ## Example - OpenStreetMap (OSM)
 
@@ -313,7 +338,7 @@ library("dplyr")
 
 ```{r}
 # download 2017 data
-wijk_en_buurt_2017 <- st_read_cbs(2017, "data/") # remove "data/"
+wijk_en_buurt_2017 <- st_read_cbs(2017) # remove "data/"
 ```
 
 ## Example - CBS Dutch municipalities
@@ -488,13 +513,13 @@ https://r-spatial.github.io/sf/articles/sf6.html
 
 ## Resources and examples
 
-![Cheatsheet](screenshot_cheatsheet.png)
+![Cheatsheet](simple_features/screenshot_cheatsheet.png)
 
 ## Resources and examples
 
 https://dominicroye.github.io/en/2018/accessing-openstreetmap-data-with-r/
 
-![](dominicroye.png)
+![](simple_features/dominicroye.png)
 
 ## Questions?
 
