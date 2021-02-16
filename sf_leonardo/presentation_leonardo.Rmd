@@ -1,0 +1,241 @@
+---
+title: "sf"
+author: "SoDaTeam"
+date: "2/15/2021"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(firatheme)
+```
+
+## Simple Features
+
+> "“A simple feature is defined by the OpenGIS Abstract specification to have both spatial and non-spatial attributes. Spatial attributes are geometry valued, and simple features are based on 2D geometry with linear interpolation between vertices.”
+
+- A **simple feature** is a standard representation of physical objects that has spatial and non-spatial attributes 
+
+- **17** simple feature types (like _point_, _line_, _polygon_)
+
+- Supported by many databases and software
+
+## Simple Features in R (`sf`)
+
+- In R simple features are implemented in the package `sf`
+
+- Provides simple features in `data.frames` or `tibbles` with a geometry list-column 
+
+- `sf` supports all simple feature types
+
+$~$
+
+```{r, echo = TRUE, warning=FALSE}
+library(sf)
+```
+
+## Simple Features: POINT and MULTIPOLYGON
+
+<!-- Plot of the two features types -->
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+point <- st_point(c(1.5,3)) # POINT
+p1 <- rbind(c(0,3), c(0,4), c(1,4), c(1,3), c(0,3))
+p2 <- rbind(c(3,3), c(2,4), c(3,4), c(3,3))
+pol <- st_multipolygon(list(list(p1), list(p2)))
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+ggplot() +
+  ggtitle("POINT and MULTIPOLYGON") +
+  geom_sf(data = point) +
+  geom_sf(data = pol) +
+  theme_fira()
+```
+
+## Simple Features and `data.frames`
+
+- The common use case is working with datasets consisting of sets of features with attributes
+
+$~$
+
+\footnotesize
+```{r, echo = TRUE}
+nc <- st_read(system.file("shape/nc.shp", package="sf"))
+```
+\normalsize
+
+## Simple Features and `data.frames`
+
+$~$
+
+\footnotesize
+```{r, echo = TRUE}
+head(nc[,c("CNTY_ID", "NAME")])
+```
+\normalsize
+
+## Simple Features and `data.frames`
+
+![Source: Illustration from Edzer Pebesma (https://r-spatial.github.io/).](img/sf_xfig.png)
+
+
+## `sf` and OpenStreetMap (OSM) data
+
+- Common use case is working with spatial or geographic data
+
+- The osmdata R package helps with extracting data from OSM
+
+- Potential use case of sf to extract and plot trees and shops within Utrecht
+
+
+$~$
+
+```{r, echo=TRUE, message = FALSE, warning = FALSE}
+library("sf")
+library("osmdata")
+library("dplyr")
+```
+
+## Example - Extract Utrecht Geometry
+
+- Extract Utrecht boundaries (`bbox`) 
+
+$~$
+
+```{r, echo=TRUE, eval=TRUE}
+utrecht_sf <- osmdata::opq(bbox = 'utrecht nl')
+
+utrecht_sf$bbox
+```
+
+## Example - Extract Features 
+
+- With the boundary of Utrecht it is possible to add OSM features 
+
+- **Shops**
+\tiny
+```{r, echo=TRUE, eval=TRUE, message = FALSE, warning = FALSE}
+shops <- utrecht_sf %>% 
+  osmdata::add_osm_feature(key = "shop", value = NULL) %>%
+  osmdata::osmdata_sf()
+```
+\normalsize
+
+- **Trees**
+\tiny
+```{r, echo=TRUE, eval=TRUE, message = FALSE, warning = FALSE}
+trees <- utrecht_sf %>%
+  osmdata::add_osm_feature(key = "natural", value = "tree") %>% 
+  osmdata::osmdata_sf()
+```
+\normalsize
+
+## Example - Plot Features 
+
+- Use ggplot to plot the points downloaded from OSM
+
+```{r, echo=TRUE, eval=FALSE, results="hide", message = FALSE, warning = FALSE}
+library(ggplot2)
+
+ggplot() + 
+  geom_sf(
+    data=shops$osm_points,
+    fill="blue",
+    color="blue"
+    ) +
+  geom_sf(
+    data=trees$osm_points,
+    fill="darkgreen",
+    color="darkgreen"
+    )
+```
+
+## Example - Plot Features 
+
+```{r, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE, fig.width=4, fig.height=4, fig.align="center"}
+library(ggplot2)
+
+ggplot() + 
+  geom_sf(
+    data=shops$osm_points,
+    fill="blue",
+    color="blue"
+    ) +
+  geom_sf(
+    data=trees$osm_points,
+    fill="darkgreen",
+    color="darkgreen"
+    )
+```
+
+## Example - Add Map of Utrecht
+
+- A map of Utrecht improves the visualization of the position of these points
+
+```{r, message=FALSE, warning=FALSE, eval=TRUE}
+library(ggmap)
+
+utrecht_map <- ggmap::get_map(
+  c(bottom = 52.026282,
+    left = 5.0041822,
+    top = 52.1356715,
+    right = 5.195155), maptype = "toner-background")
+```
+
+## Example - Add Map of Utrecht
+
+```{r, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE, fig.width=4, fig.height=4, fig.align="center"}
+ggmap(utrecht_map)
+```
+
+## Example - Combine Map and Features
+
+- Combining the map and the points to show the final result
+
+```{r, echo=TRUE, eval=FALSE, message = FALSE, warning = FALSE}
+ggmap(utrecht_map) + 
+  geom_sf(
+    data=shops$osm_points,
+    inherit.aes =FALSE,
+    fill="blue",
+    color="blue"
+    ) + 
+  geom_sf(
+    data=trees$osm_points,
+    inherit.aes =FALSE,
+    fill="darkgreen",
+    color="darkgreen"
+    )
+```
+
+## Example - Combine Map and Features
+
+```{r, echo=FALSE, eval=TRUE, message = FALSE, warning = FALSE, fig.width=4, fig.height=4, fig.align="center"}
+ggmap(utrecht_map) + 
+  geom_sf(
+    data=shops$osm_points,
+    inherit.aes =FALSE,
+    fill="blue",
+    color="blue"
+    ) + 
+  geom_sf(
+    data=trees$osm_points,
+    inherit.aes =FALSE,
+    fill="darkgreen",
+    color="darkgreen"
+    )
+```
+
+## What is missing?
+
+- Complex workflow
+
+- Retrieving data points in data.frame
+
+- Distances from original points to features
+
+- Large queries
+
+- ...
+
+
