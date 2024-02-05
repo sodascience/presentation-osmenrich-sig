@@ -10,6 +10,6 @@ For more information about the `osmenrich` package, go to [github.com/sodascienc
 ## Contact
 
 **Metasyn** is a project by the [ODISSEI Social Data Science (SoDa)](https://odissei-data.nl/nl/soda/) team.
-Do you have questions, suggestions, or remarks on the technical implementation? File an issue in the issue tracker or feel free to contact [Raoul Schram](https://github.com/qubixes).
+Do you have questions, suggestions, or remarks on the technical implementation? File an issue in the issue tracker or feel free to contact [Erik-Jan van Kesteren](https://github.com/vankesteren).
 
 <img src="soda.png" alt="SoDa logo" width="250px"/> 
